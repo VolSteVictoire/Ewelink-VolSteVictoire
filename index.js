@@ -11,6 +11,7 @@ app.use(express.json());
 const email = 'joven@orange.fr';
 const password = 'Aqw12zsx*';
 const region = 'eu'; // ou 'us', selon ton compte
+const deviceId = '10023ef9f7';
 
 let connection;
 
