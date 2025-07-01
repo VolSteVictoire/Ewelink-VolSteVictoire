@@ -6,7 +6,6 @@
   },
   "name": "ewelink-VolSteVictoire",
   "version": "1.0.0",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "setupw": "powershell '../setup/windows.ps1' && npm install",
