@@ -8,8 +8,8 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Configuration eWeLink (remplace avec tes infos)
-const email = 'ton@email.com';
-const password = 'tonmotdepasse';
+const email = 'joven@orange.fr';
+const password = 'Aqw12zsx*';
 const region = 'eu'; // ou 'us', selon ton compte
 
 let connection;
