@@ -1,19 +1,12 @@
 import { createRequire } from "module";
 let require = createRequire(import.meta.url);
 
-//const fs = require("fs");
 const ewelink = require("ewelink-api");
 const express = require("express");
 const app = express();
 const escape = require("escape-html");
 const http = require("http");
-//const https = require("https");
 import { createHash, getHashes } from "crypto";
-
-// ------------------------------------------------------------------------------------------------------------------------
-// Preperation
-// ------------------------------------------------------------------------------------------------------------------------
-
 
 const ewelinkConnection = new ewelink({
     email: process.env.EWELINK_USERNAME,
@@ -22,39 +15,26 @@ const ewelinkConnection = new ewelink({
 });
 
 const constants = {
-    port: process.env.PORT || 3000,  // ✅ Compatible avec Render
+    port: process.env.PORT || 3000,
     defaultHashingAlgorithm: "sha3-512",
 };
 
 const hashingAlgorithm = process.env.PASSWORD_HASHING_ALGORITHM == undefined ? constants.defaultHashingAlgorithm : String(process.env.PASSWORD_HASHING_ALGORITHM).toLowerCase();
 const hashedPassword = hashPassword();
 
-// disable console logging, if docker run -e "SERVER_MODE=prod"
 if (process.env.SERVER_MODE == "prod") {
     console.log = () => {};
 }
 
-// (async function containerKeepAliveForAnalysis() {
-//     console.log("Keeping container alive for filesystem analysis..");
-//     while (true) {}
-// })();
-
 (async function initialize() {
-    // test credentials
     let devices = await ewelinkConnection.getDevices();
     if ("error" in devices) console.log(devices.msg + ". The application will continue and respond with the error message, to make sure you are informed.");
 
-    // log hashed password on app start
     console.log(hashingAlgorithm + " hashed password: " + hashPassword());
-    console.log("Supported hashing algorithms by crypto:");
     console.log(getHashes());
 })();
 
-app.use(express.json()); // treat all request bodies as application/json
-
-// ------------------------------------------------------------------------------------------------------------------------
-// Routing
-// ------------------------------------------------------------------------------------------------------------------------
+app.use(express.json());
 
 app.all("/", async (req, res, next) => {
      try {
@@ -84,11 +64,9 @@ app.post("/", async (req, res) => {
     let selectedDevice;
 
     if (requestedDeviceId != undefined)
-        // deviceid present?
         selectedDevice = getDeviceById(devices, requestedDeviceId);
     else {
         if (requestedDeviceNameKeys != undefined && requestedDeviceNameKeys.length > 0)
-            // name keys present?
             selectedDevice = getDeviceByName(devices, requestedDeviceNameKeys);
         else {
             res.status(400).send(`You need to specify at least one of [deviceid, devicenameincludes]`);
@@ -137,30 +115,17 @@ app.get("/", async (req, res) => {
     res.status(200).json(devices);
 });
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Server start
-// ------------------------------------------------------------------------------------------------------------------------
-
 const useSsl = false;
 if (useSsl) {
-    https.createServer(ssl, app).listen(constants.port, () => {
-        console.log(`Ewelink api server listening on https://localhost:${constants.port} (Render)`);
+    https.createServer(ssl, app).listen(constants.port, '0.0.0.0', () => {
+        console.log(`Ewelink api server listening on https://0.0.0.0:${constants.port} (Render)`);
     });
 } else {
-    http.createServer(app).listen(constants.port, () => {
-        console.log(`Ewelink api server listening on http://localhost:${constants.port} (Render)`);
+    http.createServer(app).listen(constants.port, '0.0.0.0', () => {
+        console.log(`Ewelink api server listening on http://0.0.0.0:${constants.port} (Render)`);
     });
 }
 
-// ------------------------------------------------------------------------------------------------------------------------
-// Functions
-// ------------------------------------------------------------------------------------------------------------------------
-
-/**
- * @param {Object[]} devices Contains all known devices
- * @param {String[]} nameKeys Contains keywords to match the name fully/partly
- * @returns {Object} device, that matches the sum of keywords best
- */
 function getDeviceByName(devices, nameKeys) {
     let bestMatchingDevice = undefined;
     let highestMatchingKeyCount = 0;
@@ -175,11 +140,6 @@ function getDeviceByName(devices, nameKeys) {
     return bestMatchingDevice;
 }
 
-/**
- * @param {Object[]} devices Contains all known devices
- * @param {String[]} id ID of device to control, look up in ewelink app
- * @returns {Object} device, matching the given id
- */
 function getDeviceById(devices, id) {
     let deviceToReturn = undefined;
     devices.forEach((device) => {
