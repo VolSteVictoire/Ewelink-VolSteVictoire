@@ -8,7 +8,7 @@ const app = express();
 const escape = require("escape-html");
 const http = require("http");
 //const https = require("https");
-//const crypto = require("crypto");
+import { createHash, getHashes } from "crypto";
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Preperation
@@ -47,7 +47,7 @@ if (process.env.SERVER_MODE == "prod") {
     // log hashed password on app start
     console.log(hashingAlgorithm + " hashed password: " + hashPassword());
     console.log("Supported hashing algorithms by crypto:");
-    console.log(crypto.getHashes());
+    console.log(getHashes());
 })();
 
 app.use(express.json()); // treat all request bodies as application/json
@@ -198,5 +198,5 @@ function authenticate(req) {
 }
 
 function hashPassword() {
-    return crypto.createHash(hashingAlgorithm).update(process.env.EWELINK_PASSWORD).digest("hex");
+    return createHash(hashingAlgorithm).update(process.env.EWELINK_PASSWORD).digest("hex");
 }
