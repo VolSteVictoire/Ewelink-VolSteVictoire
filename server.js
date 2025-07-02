@@ -74,12 +74,12 @@ app.use(express.json()); // treat all request bodies as application/json
 // ------------------------------------------------------------------------------------------------------------------------
 
 app.all("/", async (req, res, next) => {
-    try {
-        authenticate(req);
-    } catch (e) {
-        res.status(401).json(e);
-        return;
-    }
+    // try {
+    //     authenticate(req);
+    // } catch (e) {
+    //     res.status(401).json(e);
+    //     return;
+    // }
 
     next();
 });
