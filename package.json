@@ -6,15 +6,16 @@
   },
   "name": "ewelink-VolSteVictoire",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",     // ✅ Script start pour Render
-    "serve": "node index.js",     // ✅ Cohérent avec main
-    "dev": "node index.js",
+    "start": "node server.js",
+    "serve": "node server.js",
+    "dev": "node server.js",
     "kill": "sudo killall node",
     "killw": "taskkill /f /im node.exe"
   },
   "author": "DoganM95",
   "license": "MIT",
-  "description": "Server-code"
+  "description": "Server-code",
+  "type": "module"
 }
