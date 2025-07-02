@@ -8,9 +8,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",     // ✅ Script start pour Render
-    "serve": "node index.js",     // ✅ Cohérent avec main
-    "dev": "node index.js",
+    "start": "node server.js",     // ✅ Script start pour Render
+    "serve": "node server.js",     // ✅ Cohérent avec main
+    "dev": "node server.js",
     "kill": "sudo killall node",
     "killw": "taskkill /f /im node.exe"
   },
