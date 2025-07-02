@@ -49,10 +49,12 @@ app.all("/", async (req, res, next) => {
 
 app.post("/", async (req, res) => {
     console.log("BODY RECU:", req.body);
+    
+    // DÉPLACER CES LIGNES ICI (dans POST uniquement)
     const requestedDeviceNameKeys = req.body.devicenameincludes != undefined ? Array.from(req.body.devicenameincludes) : undefined;
     const requestedDeviceId = req.body.deviceid != undefined && req.body.deviceid != "" ? String(req.body.deviceid) : undefined;
-    const requestedActionOnDevice = req.body.params.switch != undefined && req.body.params.switch != "" ? String(req.body.params.switch) : undefined;
-    const requestedOutlet = req.body.params.outlet != undefined && req.body.params.outlet != "" ? String(req.body.params.outlet) : undefined;
+    const requestedActionOnDevice = req.body.params && req.body.params.switch != undefined && req.body.params.switch != "" ? String(req.body.params.switch) : undefined;
+    const requestedOutlet = req.body.params && req.body.params.outlet != undefined && req.body.params.outlet != "" ? String(req.body.params.outlet) : undefined;
 
     const devices = await ewelinkConnection.getDevices();
 
