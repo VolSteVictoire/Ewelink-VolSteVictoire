@@ -1,36 +1,19 @@
 import { createRequire } from "module";
 let require = createRequire(import.meta.url);
 
-const fs = require("fs");
+//const fs = require("fs");
 const ewelink = require("ewelink-api");
 const express = require("express");
 const app = express();
 const escape = require("escape-html");
 const http = require("http");
-const https = require("https");
-const crypto = require("crypto");
+//const https = require("https");
+//const crypto = require("crypto");
 
 // ------------------------------------------------------------------------------------------------------------------------
 // Preperation
 // ------------------------------------------------------------------------------------------------------------------------
 
-try {
-    fs.mkdirSync("./volume/ssl/");
-} catch (e) {}
-
-let ssl;
-let useSsl;
-try {
-    ssl = {
-        key: fs.readFileSync("./volume/ssl/privkey.pem", "utf8"),
-        cert: fs.readFileSync("./volume/ssl/cert.pem", "utf8"),
-    };
-    useSsl = true;
-} catch (e) {
-    console.log(e);
-    console.log("Starting server without encryption.");
-    useSsl = false;
-}
 
 const ewelinkConnection = new ewelink({
     email: process.env.EWELINK_USERNAME,
