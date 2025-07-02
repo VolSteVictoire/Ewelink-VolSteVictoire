@@ -140,6 +140,7 @@ app.get("/", async (req, res) => {
 // Server start
 // ------------------------------------------------------------------------------------------------------------------------
 
+const useSsl = false;
 if (useSsl) {
     https.createServer(ssl, app).listen(constants.port, () => {
         console.log(`Ewelink api server listening on https://localhost:${constants.port} (Render)`);
