@@ -28,7 +28,7 @@ try {
     useSsl = true;
 } catch (e) {
     console.log(e);
-    console.log("STarting server without encryption.");
+    console.log("Starting server without encryption.");
     useSsl = false;
 }
 
@@ -37,10 +37,12 @@ const ewelinkConnection = new ewelink({
     password: process.env.EWELINK_PASSWORD,
     region: process.env.EWELINK_REGION,
 });
+
 const constants = {
-    port: 3000,
+    port: process.env.PORT || 3000,  // ✅ Compatible avec Render
     defaultHashingAlgorithm: "sha3-512",
 };
+
 const hashingAlgorithm = process.env.PASSWORD_HASHING_ALGORITHM == undefined ? constants.defaultHashingAlgorithm : String(process.env.PASSWORD_HASHING_ALGORITHM).toLowerCase();
 const hashedPassword = hashPassword();
 
@@ -157,11 +159,11 @@ app.get("/", async (req, res) => {
 
 if (useSsl) {
     https.createServer(ssl, app).listen(constants.port, () => {
-        console.log(`Ewelink api server listening on https://localhost:${constants.port} (Container)`);
+        console.log(`Ewelink api server listening on https://localhost:${constants.port} (Render)`);
     });
 } else {
     http.createServer(app).listen(constants.port, () => {
-        console.log(`Ewelink api server listening on http://localhost:${constants.port} (Container)`);
+        console.log(`Ewelink api server listening on http://localhost:${constants.port} (Render)`);
     });
 }
 
